@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 — L'IAG Démystifiée · Formation 45 Minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0d0d0d; --paper: #f5f0e8; --accent: #c8410a; --accent-light: #f0d5c8; --mid: #6b6560; --rule: #d4cfc7; --white: #ffffff; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); text-decoration: none; }
+  .nav-logo span { color: var(--accent); font-weight: 500; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--mid); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+  /* MODULE PROGRESS BAR */
+  .module-progress { position: fixed; top: 65px; left: 0; right: 0; z-index: 99; background: var(--white); border-bottom: 1px solid var(--rule); padding: 0 4rem; display: flex; align-items: stretch; }
+  .progress-step { flex: 1; padding: 0.6rem 0.5rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); border-right: 1px solid var(--rule); text-decoration: none; transition: all 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .progress-step:last-child { border-right: none; }
+  .progress-step.current { color: var(--accent); background: var(--accent-light); font-weight: 500; }
+  .progress-step.done { color: var(--ink); }
+  .progress-step:hover { background: var(--accent-light); color: var(--accent); }
+
+  /* HERO MODULE */
+  .module-hero { padding: 11rem 4rem 5rem; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .module-badge { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .badge-num { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--accent); border: 2px solid var(--accent); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .badge-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
+  .module-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 4vw, 4.5rem); font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .module-title em { font-style: italic; color: var(--accent); }
+  .module-subtitle { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; font-style: italic; color: var(--mid); margin-bottom: 2rem; }
+  .module-meta { display: flex; gap: 2rem; }
+  .meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .meta-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
+  .meta-value { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+
+  .module-op { background: var(--white); border: 1px solid var(--rule); padding: 2rem; }
+  .op-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .op-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic; line-height: 1.5; color: var(--ink); border-left: 3px solid var(--accent); padding-left: 1rem; }
+
+  /* CONTENT BLOCKS */
+  .lesson-block { padding: 5rem 4rem; border-bottom: 1px solid var(--rule); }
+  .lesson-header { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; margin-bottom: 3rem; align-items: start; }
+  .lesson-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: var(--accent-light); line-height: 1; }
+  .lesson-header h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; line-height: 1.2; }
+  .lesson-header p { font-size: 0.95rem; color: var(--mid); line-height: 1.7; margin-top: 0.5rem; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .info-card { background: var(--white); border: 1px solid var(--rule); padding: 1.75rem; }
+  .info-card.accent-card { border-color: var(--accent); border-top-width: 3px; }
+  .info-card h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+  .info-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .info-card li { font-size: 0.88rem; line-height: 1.5; color: var(--mid); padding-left: 1rem; position: relative; }
+  .info-card li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+
+  /* BLOOM TABLE */
+  .bloom-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+  .bloom-table th { background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem 1rem; text-align: left; }
+  .bloom-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--rule); font-size: 0.88rem; color: var(--mid); line-height: 1.4; background: var(--white); }
+  .bloom-table tr:hover td { background: var(--accent-light); }
+  .bloom-level { font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; color: var(--ink); }
+  .bloom-tag { display: inline-block; background: var(--accent); color: var(--white); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; padding: 0.2rem 0.5rem; }
+  .bloom-tag.human { background: var(--ink); }
+
+  /* QUIZ INTÉGRÉ */
+  .quiz-section { background: var(--ink); color: var(--paper); padding: 4rem; }
+  .quiz-section h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; font-style: italic; margin-bottom: 0.5rem; }
+  .quiz-section p { color: rgba(245,240,232,0.6); font-size: 0.9rem; margin-bottom: 2.5rem; }
+  .quiz-q { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 2rem; margin-bottom: 1rem; }
+  .quiz-q-text { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 1.25rem; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-opt-btn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--paper); padding: 0.7rem 1.2rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; text-align: left; transition: all 0.2s; }
+  .quiz-opt-btn:hover { border-color: var(--accent); background: rgba(200,65,10,0.2); }
+  .quiz-opt-btn.correct { border-color: #4caf50; background: rgba(76,175,80,0.2); color: #81c784; }
+  .quiz-opt-btn.wrong { border-color: var(--accent); background: rgba(200,65,10,0.2); color: #ef9a9a; }
+  .quiz-feedback { font-size: 0.82rem; margin-top: 0.75rem; padding: 0.75rem 1rem; border-left: 3px solid; display: none; line-height: 1.5; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { border-color: #4caf50; background: rgba(76,175,80,0.1); color: #81c784; }
+  .quiz-feedback.ko { border-color: var(--accent); background: rgba(200,65,10,0.1); color: #ef9a9a; }
+
+  /* NAVIGATION BAS DE PAGE */
+  .module-nav { padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--rule); }
+  .nav-prev, .nav-next { display: flex; flex-direction: column; gap: 0.3rem; text-decoration: none; padding: 1rem 1.5rem; border: 1px solid var(--rule); transition: all 0.2s; max-width: 280px; }
+  .nav-prev:hover, .nav-next:hover { border-color: var(--accent); }
+  .nav-next { text-align: right; }
+  .nav-direction { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
+  .nav-module-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--ink); }
+
+  footer { padding: 3rem 4rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic; color: var(--mid); }
+  .footer-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule); }
+
+  @media (max-width: 900px) {
+    nav, .module-progress { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .nav-links { display: none; }
+    .module-hero { grid-template-columns: 1fr; padding: 9rem 1.5rem 3rem; }
+    .lesson-block, .quiz-section { padding: 3rem 1.5rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .module-nav { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; }
+    .nav-prev, .nav-next { max-width: 100%; width: 100%; }
+    .nav-next { text-align: left; }
+    footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+    .progress-step { font-size: 0.5rem; padding: 0.5rem 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>45'</span> — Formation IAG</a>
+  <ul class="nav-links">
+    <li><a href="index.html#modules">Programme</a></li>
+    <li><a href="module-2.html">Framework RECIPE</a></li>
+    <li><a href="module-4.html">Boussole éthique</a></li>
+    <li><a href="a-propos.html">À propos</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- BARRE DE PROGRESSION MODULES -->
+<div class="module-progress">
+  <a href="index.html#diagnostic" class="progress-step done">M0 · Accroche</a>
+  <a href="module-1.html" class="progress-step current">M1 · IAG Démystifiée</a>
+  <a href="module-2.html" class="progress-step">M2 · RECIPE</a>
+  <a href="module-3.html" class="progress-step">M3 · Workflow 45'</a>
+  <a href="module-4.html" class="progress-step">M4 · Boussole Éthique</a>
+</div>
+
+<!-- HERO MODULE -->
+<section class="module-hero">
+  <div>
+    <div class="module-badge">
+      <div class="badge-num">1</div>
+      <span class="badge-label">Premier module · 30 min</span>
+    </div>
+    <h1 class="module-title">L'IAG<br><em>démystifiée.</em></h1>
+    <p class="module-subtitle">Ce qu'elle fait. Ce qu'elle ne fait pas. Ce que vous, vous faites mieux.</p>
+    <div class="module-meta">
+      <div class="meta-item">
+        <span class="meta-label">Durée</span>
+        <span class="meta-value">30 min</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Format</span>
+        <span class="meta-value">Lecture + Quiz</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Niveau Bloom</span>
+        <span class="meta-value">Comprendre</span>
+      </div>
+    </div>
+  </div>
+  <div class="module-op">
+    <div class="op-label">Objectif pédagogique · OP1</div>
+    <p class="op-text">À l'issue de ce module, vous serez capable de distinguer ce que l'IAG peut et ne peut pas faire en contexte pédagogique, pour identifier les tâches de conception qu'il est pertinent de lui déléguer.</p>
+  </div>
+</section>
+
+<!-- LEÇON 1 : DÉFINITION -->
+<div class="lesson-block">
+  <div class="lesson-header">
+    <div class="lesson-num">1.1</div>
+    <div>
+      <h2>L'IAG : ni magie, ni menace.</h2>
+      <p>Avant de l'utiliser, comprenons ce qu'elle est — et surtout ce qu'elle n'est pas.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="info-card accent-card">
+      <h4>Ce que l'IAG peut faire</h4>
+      <ul>
+        <li>Répondre à des questions dans tous les domaines</li>
+        <li>Produire du contenu — rédiger, reformuler, traduire</li>
+        <li>Simplifier et adapter un contenu à un public donné</li>
+        <li>Synthétiser et résumer des documents longs</li>
+        <li>Générer des quiz, exercices et études de cas</li>
+        <li>Analyser et classer des données textuelles</li>
+        <li>Suggérer des titres, plans et structures</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Ce que l'IAG ne peut pas faire</h4>
+      <ul>
+        <li>Générer du savoir procédural (uniquement déclaratif)</li>
+        <li>Raisonner au sens strict du terme</li>
+        <li>Admettre qu'elle ne sait pas — elle invente</li>
+        <li>Contextualiser finement une réponse</li>
+        <li>Prendre position ou argumenter de façon critique</li>
+        <li>Se corriger sans intervention humaine</li>
+        <li>Respecter automatiquement le droit d'auteur</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem; background:var(--accent-light); border-left:3px solid var(--accent); padding:1.5rem 2rem;">
+    <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.05rem; color:var(--ink);">
+      "L'IAG n'est qu'un outil qui vous fait gagner beaucoup de temps et génère des propositions argumentées. Il appartient à l'humain d'évaluer les réponses et de décider."
+    </p>
+    <p style="font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; color:var(--mid); margin-top:0.75rem; text-transform:uppercase;">— Principe fondateur de cette formation</p>
+  </div>
+</div>
+
+<!-- LEÇON 2 : BLOOM REVISITÉ -->
+<div class="lesson-block" style="background:var(--white);">
+  <div class="lesson-header">
+    <div class="lesson-num">1.2</div>
+    <div>
+      <h2>La taxonomie de Bloom à l'ère de l'IA.</h2>
+      <p>Tous les niveaux cognitifs ne sont pas égaux face à l'IAG. Ce tableau vous permet de voir d'un coup d'œil ce que vous pouvez déléguer — et ce que vous devez garder.</p>
+    </div>
+  </div>
+
+  <table class="bloom-table">
+    <thead>
+      <tr>
+        <th>Niveau Bloom</th>
+        <th>Capacité de l'IAG</th>
+        <th>Compétence humaine distinctive</th>
+        <th>Recommandation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="bloom-level">Mémoriser</span></td>
+        <td>Se rappeler d'informations factuelles, énumérer, définir</td>
+        <td>Se rappeler dans des contextes sans accès à la technologie</td>
+        <td><span class="bloom-tag">À modifier</span></td>
+      </tr>
+      <tr>
+        <td><span class="bloom-level">Comprendre</span></td>
+        <td>Décrire avec d'autres mots, reconnaître un exemple</td>
+        <td>Contextualiser en tenant compte de considérations émotionnelles ou éthiques</td>
+        <td><span class="bloom-tag">À réviser</span></td>
+      </tr>
+      <tr>
+        <td><span class="bloom-level">Appliquer</span></td>
+        <td>Utiliser un processus ou modèle pour illustrer</td>
+        <td>Expérimenter en situation réelle, appliquer créativité et imagination</td>
+        <td><span class="bloom-tag">À réviser</span></td>
+      </tr>
+      <tr>
+        <td><span class="bloom-level">Analyser</span></td>
+        <td>Comparer, déduire des tendances, calculer</td>
+        <td>Penser de façon critique, interpréter, faire des choix authentiques</td>
+        <td><span class="bloom-tag">À modifier</span></td>
+      </tr>
+      <tr>
+        <td><span class="bloom-level">Évaluer</span></td>
+        <td>Identifier avantages/inconvénients, élaborer des grilles</td>
+        <td>Réflexion métacognitive, évaluer les conséquences éthiques</td>
+        <td><span class="bloom-tag">À réviser</span></td>
+      </tr>
+      <tr>
+        <td><span class="bloom-level">Créer</span></td>
+        <td>Proposer des alternatives, décrire des cas concrets</td>
+        <td>Formuler des solutions créatives faisant appel au jugement humain</td>
+        <td><span class="bloom-tag human">Humain</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--mid); margin-top:0.75rem; letter-spacing:0.08em;">Source : Munn, Y. (2023). La taxonomie de Bloom revisitée, Le Carrefour UQAM — adapté de Bloom's Taxonomy Revisited, Oregon State University.</p>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section">
+  <h3>Vérifiez votre compréhension.</h3>
+  <p>3 questions rapides avant de passer au module suivant.</p>
+
+  <div class="quiz-q" id="q1">
+    <div class="quiz-q-text">Une IAG comme ChatGPT peut-elle admettre spontanément qu'elle ne connaît pas la réponse à une question ?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt-btn" onclick="answer(this, false, 'q1', 'Non — c\'est l\'une des limites fondamentales de l\'IAG. Elle génère toujours une réponse, même incorrecte. Ce phénomène s\'appelle l\'hallucination. La validation humaine est donc indispensable.')">Oui, elle signale ses incertitudes</button>
+      <button class="quiz-opt-btn" onclick="answer(this, true, 'q1', 'Exact. L\'IAG ne sait pas qu\'elle ne sait pas. Elle produit toujours du contenu, même quand ses données sont insuffisantes. C\'est pourquoi la vérification de l\'enseignant reste non négociable.')">Non, elle génère toujours une réponse</button>
+    </div>
+    <div class="quiz-feedback" id="feedback-q1"></div>
+  </div>
+
+  <div class="quiz-q" id="q2">
+    <div class="quiz-q-text">Selon la taxonomie de Bloom revisitée, quel niveau cognitif reste une compétence exclusivement humaine face à l'IAG ?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt-btn" onclick="answer(this, false, 'q2', 'Mémoriser est justement le niveau où l\'IAG excelle le plus. Elle peut rappeler des informations factuelles de façon quasi illimitée.')">Mémoriser</button>
+      <button class="quiz-opt-btn" onclick="answer(this, false, 'q2', 'Analyser doit être modifié à l\'ère de l\'IAG, car elle peut comparer et déduire des tendances. Mais la pensée critique authentique reste humaine.')">Analyser</button>
+      <button class="quiz-opt-btn" onclick="answer(this, true, 'q2', 'Exact. Créer — au sens de formuler des solutions créatives originales faisant appel au jugement humain — reste le domaine où l\'IAG ne peut que proposer des alternatives, sans véritable créativité.')">Créer</button>
+    </div>
+    <div class="quiz-feedback" id="feedback-q2"></div>
+  </div>
+
+  <div class="quiz-q" id="q3">
+    <div class="quiz-q-text">Vous demandez à une IAG de générer une étude de cas sur la gestion de crise dans votre secteur. Quelle action est indispensable avant d'utiliser ce contenu avec vos étudiants ?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt-btn" onclick="answer(this, false, 'q3', 'Regenerer n\'est pas la bonne approche — une deuxième version pourrait contenir les mêmes erreurs. Le problème n\'est pas la quantité de tentatives, mais la validation humaine.')">Régénérer jusqu'à obtenir une réponse parfaite</button>
+      <button class="quiz-opt-btn" onclick="answer(this, true, 'q3', 'Exactement. L\'IAG peut contextualiser superficiellement, mais elle ne connaît pas vraiment le terrain dont elle parle. Votre expertise métier est le filtre indispensable entre la production IA et l\'apprenant.')">Vérifier la fiabilité et la pertinence contextuelle du contenu</button>
+      <button class="quiz-opt-btn" onclick="answer(this, false, 'q3', 'La longueur n\'est pas un indicateur de qualité ou de fiabilité pour une production IAG. Une réponse longue peut être tout aussi erronée.')">Vérifier que la réponse est suffisamment longue</button>
+    </div>
+    <div class="quiz-feedback" id="feedback-q3"></div>
+  </div>
+</div>
+
+<!-- NAVIGATION MODULES -->
+<div class="module-nav">
+  <a href="index.html#diagnostic" class="nav-prev">
+    <span class="nav-direction">← Module précédent</span>
+    <span class="nav-module-name">M0 — Accroche & Diagnostic</span>
+  </a>
+  <a href="module-2.html" class="nav-next">
+    <span class="nav-direction">Module suivant →</span>
+    <span class="nav-module-name">M2 — Framework RECIPE</span>
+  </a>
+</div>
+
+<footer>
+  <div class="footer-brand">45 minutes — Formation IAG</div>
+  <div class="footer-meta">Mémoire professionnalisant · DUFA 2025</div>
+</footer>
+
+<script>
+function answer(btn, isCorrect, qId, feedback) {
+  const q = document.getElementById(qId);
+  const allBtns = q.querySelectorAll('.quiz-opt-btn');
+  const fb = document.getElementById('feedback-' + qId);
+
+  allBtns.forEach(b => b.disabled = true);
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  fb.textContent = feedback;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'ok' : 'ko');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 — Framework RECIPE · Formation 45 Minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f0e8;--accent:#c8410a;--accent-light:#f0d5c8;--mid:#6b6560;--rule:#d4cfc7;--white:#ffffff;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;background:rgba(245,240,232,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+.nav-logo{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);text-decoration:none;}
+.nav-logo span{color:var(--accent);font-weight:500;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--mid);transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);}
+.module-progress{position:fixed;top:65px;left:0;right:0;z-index:99;background:var(--white);border-bottom:1px solid var(--rule);padding:0 4rem;display:flex;}
+.progress-step{flex:1;padding:.6rem .5rem;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);border-right:1px solid var(--rule);text-decoration:none;transition:all .2s;}
+.progress-step:last-child{border-right:none;}
+.progress-step.current{color:var(--accent);background:var(--accent-light);font-weight:500;}
+.progress-step.done{color:var(--ink);}
+.progress-step:hover{background:var(--accent-light);color:var(--accent);}
+.module-hero{padding:11rem 4rem 5rem;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.module-badge{display:inline-flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;}
+.badge-num{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:var(--accent);border:2px solid var(--accent);width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+.badge-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);}
+.module-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,5vw,5.5rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:.5rem;}
+.module-title em{font-style:italic;color:var(--accent);}
+.module-subtitle{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;font-style:italic;color:var(--mid);margin-bottom:2rem;}
+.module-meta{display:flex;gap:2rem;}
+.meta-item{display:flex;flex-direction:column;gap:.2rem;}
+.meta-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);}
+.meta-value{font-family:'DM Mono',monospace;font-size:.85rem;font-weight:500;color:var(--ink);}
+.module-op{background:var(--white);border:1px solid var(--rule);padding:2rem;}
+.op-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.op-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;line-height:1.5;color:var(--ink);border-left:3px solid var(--accent);padding-left:1rem;}
+.seq-block{padding:5rem 4rem;border-bottom:1px solid var(--rule);}
+.seq-tag{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem;}
+.seq-header{margin-bottom:3rem;}
+.seq-header h2{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;line-height:1.15;margin-bottom:.75rem;}
+.seq-header p{font-size:1rem;line-height:1.7;color:var(--mid);max-width:640px;}
+.split-demo{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);overflow:hidden;}
+.demo-col{padding:2rem;}
+.demo-col.bad{background:var(--white);border-right:1px solid var(--rule);}
+.demo-col.good{background:var(--ink);color:var(--paper);}
+.demo-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.25rem;}
+.demo-badge .dot{width:8px;height:8px;border-radius:50%;}
+.demo-badge.bad-badge .dot{background:#e57373;}
+.demo-badge.good-badge .dot{background:#81c784;}
+.demo-badge.bad-badge{color:var(--mid);}
+.demo-badge.good-badge{color:rgba(245,240,232,.6);}
+.prompt-box{padding:1.25rem;border:1px solid;font-family:'DM Mono',monospace;font-size:.82rem;line-height:1.6;margin-bottom:1.5rem;}
+.demo-col.bad .prompt-box{border-color:var(--rule);background:var(--paper);}
+.demo-col.good .prompt-box{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.05);}
+.prompt-label{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;opacity:.5;display:block;}
+.result-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;opacity:.6;}
+.result-text{font-size:.85rem;line-height:1.6;padding:1rem;border:1px solid;}
+.demo-col.bad .result-text{border-color:var(--rule);background:var(--accent-light);color:var(--mid);font-style:italic;}
+.demo-col.good .result-text{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:rgba(245,240,232,.85);}
+.verdict{display:flex;align-items:center;gap:.75rem;margin-top:1.25rem;padding:.75rem 1rem;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;}
+.demo-col.bad .verdict{background:var(--accent-light);color:var(--accent);}
+.tip-box{margin-top:2rem;padding:1.5rem 2rem;background:var(--accent-light);border-left:3px solid var(--accent);display:flex;gap:1rem;align-items:flex-start;}
+.tip-icon{font-size:1.5rem;flex-shrink:0;}
+.tip-text{font-size:.95rem;line-height:1.6;color:var(--ink);}
+.recipe-section{padding:5rem 4rem;border-bottom:1px solid var(--rule);background:var(--ink);color:var(--paper);}
+.recipe-header{margin-bottom:4rem;}
+.recipe-header h2{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:var(--paper);margin-bottom:.75rem;}
+.recipe-header p{color:rgba(245,240,232,.6);font-size:1rem;line-height:1.7;max-width:600px;}
+.recipe-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid rgba(255,255,255,.1);overflow:hidden;}
+.recipe-card{padding:1.75rem 1.25rem;border-right:1px solid rgba(255,255,255,.1);cursor:pointer;transition:background .25s;position:relative;min-height:220px;display:flex;flex-direction:column;justify-content:space-between;}
+.recipe-card:last-child{border-right:none;}
+.recipe-card:hover,.recipe-card.active{background:rgba(200,65,10,.15);}
+.recipe-card.active{border-bottom:3px solid var(--accent);}
+.card-letter{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1;margin-bottom:.4rem;color:var(--accent);opacity:.35;transition:opacity .2s;}
+.recipe-card.active .card-letter,.recipe-card:hover .card-letter{opacity:1;}
+.card-word{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,240,232,.4);margin-bottom:.6rem;}
+.card-question{font-size:.78rem;line-height:1.5;color:rgba(245,240,232,.6);}
+.recipe-card.active .card-question{color:rgba(245,240,232,.9);}
+.recipe-detail{background:rgba(200,65,10,.08);border:1px solid rgba(200,65,10,.25);border-top:none;padding:2.5rem;display:none;}
+.recipe-detail.visible{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+.detail-word{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem;}
+.detail-left h3{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:1rem;}
+.detail-left p{font-size:.92rem;line-height:1.7;color:rgba(245,240,232,.7);margin-bottom:1rem;}
+.ethical-alert{background:rgba(200,65,10,.2);border-left:3px solid var(--accent);padding:1rem 1.25rem;font-size:.82rem;line-height:1.5;color:rgba(245,240,232,.8);font-style:italic;}
+.ethical-alert::before{content:'Et l\'humain dans tout ca ?';font-style:normal;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.4rem;}
+.detail-right{background:rgba(0,0,0,.2);padding:1.5rem;}
+.detail-example-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:.75rem;}
+.detail-example{font-family:'DM Mono',monospace;font-size:.8rem;line-height:1.7;color:rgba(245,240,232,.8);}
+.hl{color:#ffcc80;background:rgba(255,204,128,.15);padding:.1em .3em;}
+.atelier-section{padding:5rem 4rem;border-bottom:1px solid var(--rule);}
+.atelier-intro{max-width:680px;margin-bottom:3rem;}
+.atelier-intro h2{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;line-height:1.15;margin-bottom:1rem;}
+.atelier-intro p{font-size:1rem;line-height:1.7;color:var(--mid);}
+.step-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:1.25rem;}
+.cas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem;}
+.cas-card{padding:1.5rem;background:var(--white);border:2px solid var(--rule);cursor:pointer;transition:all .2s;}
+.cas-card:hover{border-color:var(--accent);}
+.cas-card.selected{border-color:var(--accent);background:var(--accent);color:var(--white);}
+.cas-card.selected .cas-num,.cas-card.selected .cas-desc{color:rgba(255,255,255,.75);}
+.cas-num{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:var(--mid);margin-bottom:.75rem;}
+.cas-title{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700;line-height:1.3;margin-bottom:.5rem;}
+.cas-desc{font-size:.78rem;line-height:1.4;color:var(--mid);}
+.prompt-builder{background:var(--ink);padding:2.5rem;color:var(--paper);}
+.builder-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;}
+.builder-title{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;}
+.builder-status{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(245,240,232,.35);}
+.builder-fields{display:flex;flex-direction:column;gap:1rem;margin-bottom:2.5rem;}
+.field-row{display:grid;grid-template-columns:90px 1fr;gap:0;border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:border-color .2s;}
+.field-row:focus-within{border-color:var(--accent);}
+.field-label-col{padding:.8rem 1rem;background:rgba(255,255,255,.04);border-right:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;justify-content:center;}
+.field-letter{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;line-height:1;}
+.field-name{font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,240,232,.35);margin-top:.1rem;}
+.field-input{padding:.8rem 1.2rem;background:transparent;border:none;color:var(--paper);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;width:100%;resize:none;line-height:1.5;}
+.field-input::placeholder{color:rgba(245,240,232,.2);font-style:italic;}
+.output-section{border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;}
+.output-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:1rem;}
+.output-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:1.5rem;font-family:'DM Mono',monospace;font-size:.8rem;line-height:1.9;color:rgba(245,240,232,.75);min-height:100px;white-space:pre-wrap;}
+.out-r{color:#ff8a65;}.out-e1{color:#ffb74d;}.out-c{color:#fff176;}.out-i{color:#a5d6a7;}.out-p{color:#80deea;}.out-e2{color:#ce93d8;}
+.output-placeholder{font-style:italic;color:rgba(245,240,232,.2);}
+.legend{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.25rem;}
+.legend-item{display:flex;align-items:center;gap:.4rem;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;color:rgba(245,240,232,.4);}
+.legend-dot{width:9px;height:9px;border-radius:50%;}
+.builder-actions{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;align-items:center;}
+.btn-example{padding:.85rem 1.75rem;background:var(--accent);color:var(--white);border:none;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+.btn-example:hover{opacity:.85;}
+.btn-copy{padding:.85rem 1.5rem;background:transparent;color:rgba(245,240,232,.55);border:1px solid rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-copy:hover{border-color:var(--accent);color:var(--paper);}
+.btn-reset{padding:.85rem 1.25rem;background:transparent;color:rgba(245,240,232,.3);border:1px solid rgba(255,255,255,.07);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .2s;}
+.btn-reset:hover{color:rgba(245,240,232,.6);}
+.copy-toast{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:#81c784;display:none;align-items:center;gap:.4rem;}
+.copy-toast.show{display:flex;}
+.module-nav{padding:3rem 4rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--rule);}
+.nav-prev,.nav-next{display:flex;flex-direction:column;gap:.3rem;text-decoration:none;padding:1rem 1.5rem;border:1px solid var(--rule);transition:all .2s;max-width:280px;}
+.nav-prev:hover,.nav-next:hover{border-color:var(--accent);}
+.nav-next{text-align:right;}
+.nav-direction{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);}
+.nav-module-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);}
+footer{padding:3rem 4rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;color:var(--mid);}
+.footer-meta{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rule);}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@media(max-width:900px){
+  nav,.module-progress,.module-nav{padding-left:1.5rem;padding-right:1.5rem;}
+  .nav-links{display:none;}
+  .module-hero{grid-template-columns:1fr;padding:9rem 1.5rem 3rem;}
+  .seq-block,.recipe-section,.atelier-section{padding:3rem 1.5rem;}
+  .split-demo{grid-template-columns:1fr;}
+  .demo-col.bad{border-right:none;border-bottom:1px solid var(--rule);}
+  .recipe-cards{grid-template-columns:repeat(2,1fr);}
+  .recipe-card{border-bottom:1px solid rgba(255,255,255,.08);}
+  .recipe-detail.visible{grid-template-columns:1fr;}
+  .cas-grid{grid-template-columns:1fr 1fr;}
+  .module-nav{flex-direction:column;gap:1rem;}
+  .nav-prev,.nav-next{max-width:100%;width:100%;text-align:left;}
+  footer{flex-direction:column;gap:1rem;padding:2rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>45'</span> — Formation IAG</a>
+  <ul class="nav-links">
+    <li><a href="index.html#modules">Programme</a></li>
+    <li><a href="module-2.html" class="active">Framework RECIPE</a></li>
+    <li><a href="module-4.html">Boussole éthique</a></li>
+    <li><a href="a-propos.html">À propos</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="module-progress">
+  <a href="index.html#diagnostic" class="progress-step done">M0 · Accroche</a>
+  <a href="module-1.html" class="progress-step done">M1 · IAG Démystifiée</a>
+  <a href="module-2.html" class="progress-step current">M2 · RECIPE</a>
+  <a href="module-3.html" class="progress-step">M3 · Workflow 45'</a>
+  <a href="module-4.html" class="progress-step">M4 · Boussole Éthique</a>
+</div>
+
+<section class="module-hero">
+  <div>
+    <div class="module-badge">
+      <div class="badge-num">2</div>
+      <span class="badge-label">Deuxième module · 45 min</span>
+    </div>
+    <h1 class="module-title">Le framework<br><em>RECIPE.</em></h1>
+    <p class="module-subtitle">Six composantes. Des prompts qui produisent du premier coup.</p>
+    <div class="module-meta">
+      <div class="meta-item"><span class="meta-label">Durée</span><span class="meta-value">45 min</span></div>
+      <div class="meta-item"><span class="meta-label">Format</span><span class="meta-value">Interactif</span></div>
+      <div class="meta-item"><span class="meta-label">Niveau Bloom</span><span class="meta-value">Appliquer</span></div>
+    </div>
+  </div>
+  <div class="module-op">
+    <div class="op-label">Objectif pédagogique · OP2</div>
+    <p class="op-text">Rédiger un prompt structuré permettant de générer une ressource pédagogique adaptée à un public et à un objectif définis.</p>
+  </div>
+</section>
+
+<!-- 2.1 MYTHE DU PROMPT -->
+<div class="seq-block reveal">
+  <div class="seq-header">
+    <p class="seq-tag">Séquence 2.1 · Le constat</p>
+    <h2>L'IA ne lit pas dans vos pensées.</h2>
+    <p>Même demande, deux approches. Le résultat parle de lui-même.</p>
+  </div>
+  <div class="split-demo">
+    <div class="demo-col bad">
+      <div class="demo-badge bad-badge"><span class="dot"></span> Prompt non structuré</div>
+      <div class="prompt-box"><span class="prompt-label">Ce que vous tapez</span>"Fais-moi un exercice sur la gestion de projet pour mes étudiants."</div>
+      <div class="result-label">Ce que vous obtenez</div>
+      <div class="result-text">"Voici un exercice sur la gestion de projet : Vous êtes chef de projet. Vous devez gérer une équipe. Listez les étapes d'un projet. Durée : 1h. Objectif : comprendre la gestion de projet."</div>
+      <div class="verdict">⚑ Générique · Non contextualisé · Inutilisable tel quel</div>
+    </div>
+    <div class="demo-col good">
+      <div class="demo-badge good-badge"><span class="dot"></span> Prompt RECIPE structuré</div>
+      <div class="prompt-box"><span class="prompt-label">Ce que vous tapez</span><span style="color:#ff8a65">[R]</span> Tu es ingénieur pédagogique expert en formation pro. <span style="color:#ffb74d">[E]</span> L'objectif : appliquer la méthode Agile à un projet réel. <span style="color:#fff176">[C]</span> Séance 2h, groupe de 4, niveau M1 débutant en Agile. <span style="color:#a5d6a7">[I]</span> Étude de cas complète : situation, contraintes, livrables, grille d'évaluation 5 critères. <span style="color:#80deea">[P]</span> Master 1 Management, sans expérience pro. <span style="color:#ce93d8">[E]</span> Niveau de complexité similaire à [exemple fourni].</div>
+      <div class="result-label">Ce que vous obtenez</div>
+      <div class="result-text">Une étude de cas complète, contextualisée, calibrée pour M1 sans expérience, avec une grille d'évaluation en 5 critères alignée sur les objectifs Agile. Utilisable directement.</div>
+      <div class="verdict" style="background:rgba(129,199,132,.12);color:#a5d6a7;">✓ Contextualisé · Calibré · Directement utilisable</div>
+    </div>
+  </div>
+  <div class="tip-box">
+    <span class="tip-icon">💡</span>
+    <p class="tip-text"><strong>La règle d'or RECIPE :</strong> Plus vous remplissez de composantes, moins l'IAG improvise. Moins elle improvise, moins vous corrigez. Moins vous corrigez, plus vous gagnez du temps.</p>
+  </div>
+</div>
+
+<!-- 2.2 FRAMEWORK RECIPE -->
+<div class="recipe-section">
+  <div class="recipe-header reveal">
+    <p class="seq-tag" style="color:var(--accent-light);">Séquence 2.2 · Le framework</p>
+    <h2>La méthode RECIPE en 6 composantes.</h2>
+    <p>Cliquez sur chaque lettre pour explorer la composante, comprendre son rôle et voir un exemple concret.</p>
+  </div>
+  <div class="recipe-cards" id="recipe-cards">
+    <div class="recipe-card active" onclick="showCard(0)"><div><div class="card-letter">R</div><div class="card-word">Rôle</div><div class="card-question">Quel expert dois-je activer ?</div></div></div>
+    <div class="recipe-card" onclick="showCard(1)"><div><div class="card-letter">E</div><div class="card-word">Enjeu</div><div class="card-question">Quel est l'objectif final mesurable ?</div></div></div>
+    <div class="recipe-card" onclick="showCard(2)"><div><div class="card-letter">C</div><div class="card-word">Contexte</div><div class="card-question">Quelle est la situation précise ?</div></div></div>
+    <div class="recipe-card" onclick="showCard(3)"><div><div class="card-letter">I</div><div class="card-word">Instructions</div><div class="card-question">Quelles contraintes de format ?</div></div></div>
+    <div class="recipe-card" onclick="showCard(4)"><div><div class="card-letter">P</div><div class="card-word">Public</div><div class="card-question">À qui s'adresse la ressource ?</div></div></div>
+    <div class="recipe-card" onclick="showCard(5)"><div><div class="card-letter">E</div><div class="card-word">Exemples</div><div class="card-question">Puis-je fournir un modèle ?</div></div></div>
+  </div>
+  <div class="recipe-detail visible" id="recipe-detail"></div>
+</div>
+
+<!-- 2.3 ATELIER -->
+<div class="atelier-section">
+  <div class="atelier-intro reveal">
+    <p class="seq-tag">Séquence 2.3 · L'atelier</p>
+    <h2>Construisez votre premier prompt pédagogique.</h2>
+    <p>Choisissez un cas, remplissez les 6 composantes, et copiez un prompt prêt à l'emploi directement dans ChatGPT ou Claude.</p>
+  </div>
+
+  <div class="reveal">
+    <p class="step-label">Étape 1 — Choisissez votre situation</p>
+    <div class="cas-grid" id="cas-grid">
+      <div class="cas-card selected" onclick="selectCas(0)"><div class="cas-num">CAS 01</div><div class="cas-title">Transformer un plan de cours en quiz formatif</div><div class="cas-desc">Votre plan devient une série de questions pertinentes.</div></div>
+      <div class="cas-card" onclick="selectCas(1)"><div class="cas-num">CAS 02</div><div class="cas-title">Créer une étude de cas contextualisée</div><div class="cas-desc">Un scénario réaliste calibré pour votre public.</div></div>
+      <div class="cas-card" onclick="selectCas(2)"><div class="cas-num">CAS 03</div><div class="cas-title">Générer une grille d'évaluation alignée</div><div class="cas-desc">Des critères cohérents avec vos objectifs.</div></div>
+      <div class="cas-card" onclick="selectCas(3)"><div class="cas-num">CAS 04</div><div class="cas-title">Concevoir une activité brise-glace</div><div class="cas-desc">Lancer une séquence de façon engageante.</div></div>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <p class="step-label">Étape 2 — Remplissez les composantes RECIPE</p>
+    <div class="prompt-builder">
+      <div class="builder-header">
+        <span class="builder-title">Éditeur de prompt RECIPE</span>
+        <span class="builder-status" id="bstatus">0 / 6 composantes remplies</span>
+      </div>
+      <div class="builder-fields">
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#ff8a65;">R</div><div class="field-name">Rôle</div></div><input class="field-input" id="fr" placeholder="Tu es un ingénieur pédagogique expert en…" oninput="updateOut()"></div>
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#ffb74d;">E</div><div class="field-name">Enjeu</div></div><input class="field-input" id="fe1" placeholder="L'objectif est que l'étudiant soit capable de…" oninput="updateOut()"></div>
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#fff176;">C</div><div class="field-name">Contexte</div></div><input class="field-input" id="fc" placeholder="Séance de 2h, groupe de 25 étudiants, niveau L3…" oninput="updateOut()"></div>
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#a5d6a7;">I</div><div class="field-name">Instructions</div></div><textarea class="field-input" id="fi" rows="2" placeholder="Génère 10 questions QCM avec 4 choix, correction détaillée et niveau Bloom ciblé…" oninput="updateOut()"></textarea></div>
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#80deea;">P</div><div class="field-name">Public</div></div><input class="field-input" id="fp" placeholder="Étudiants de Master 1 en management, sans expérience professionnelle…" oninput="updateOut()"></div>
+        <div class="field-row"><div class="field-label-col"><div class="field-letter" style="color:#ce93d8;">E</div><div class="field-name">Exemples</div></div><textarea class="field-input" id="fe2" rows="2" placeholder="Voici un exemple du niveau attendu : [coller] / Évite ce type de formulation : [exemple]…" oninput="updateOut()"></textarea></div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">Votre prompt assemblé — prêt à copier</div>
+        <div class="output-box" id="obox"><span class="output-placeholder">Remplissez les champs ci-dessus. Votre prompt s'assemble en temps réel avec les couleurs RECIPE.</span></div>
+        <div class="legend" id="leg" style="display:none;">
+          <div class="legend-item"><div class="legend-dot" style="background:#ff8a65;"></div>Rôle</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ffb74d;"></div>Enjeu</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#fff176;"></div>Contexte</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#a5d6a7;"></div>Instructions</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#80deea;"></div>Public</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ce93d8;"></div>Exemples</div>
+        </div>
+      </div>
+      <div class="builder-actions">
+        <button class="btn-example" onclick="prefill()">Voir un exemple complet →</button>
+        <button class="btn-copy" onclick="doCopy()">Copier le prompt</button>
+        <button class="btn-reset" onclick="doReset()">Réinitialiser</button>
+        <div class="copy-toast" id="ctoa">✓ Copié !</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="module-nav">
+  <a href="module-1.html" class="nav-prev"><span class="nav-direction">← Module précédent</span><span class="nav-module-name">M1 — L'IAG Démystifiée</span></a>
+  <a href="module-3.html" class="nav-next"><span class="nav-direction">Module suivant →</span><span class="nav-module-name">M3 — Workflow des 45'</span></a>
+</div>
+
+<footer>
+  <div class="footer-brand">45 minutes — Formation IAG</div>
+  <div class="footer-meta">Mémoire professionnalisant · DUFA 2025</div>
+</footer>
+
+<script>
+const RD=[
+  {l:'R',w:'Rôle',desc:"Assignez à l'IAG un rôle d'expert précis. Ce n'est pas une formule magique — c'est une instruction de cadrage qui oriente le registre, le niveau de précision et le vocabulaire de la réponse.",eth:"Assigner un rôle à l'IAG ne lui donne pas une conscience professionnelle. La validation pédagogique reste entièrement entre vos mains.",ex:'<span class="hl">Tu es un ingénieur pédagogique expert</span> en formation professionnelle, spécialisé dans la conception d\'évaluations pour l\'enseignement supérieur.'},
+  {l:'E',w:'Enjeu',desc:"Définissez l'objectif final mesurable. L'IAG doit savoir vers quoi elle travaille — pas juste 'faire un exercice', mais 'permettre à l'apprenant de faire X'.",eth:"L'enjeu pédagogique, c'est vous qui le posez. L'IAG peut le servir, pas le définir à votre place.",ex:'L\'objectif est que l\'étudiant soit capable d\'<span class="hl">appliquer la méthode Agile</span> à un projet réel en identifiant rôles, sprints et livrables attendus.'},
+  {l:'C',w:'Contexte',desc:"Décrivez la situation concrète : durée, format, contraintes techniques, environnement d'apprentissage, outils disponibles.",eth:null,ex:'<span class="hl">Séance présentielle de 2h</span>, groupe de 24 étudiants, 4 équipes de 6, aucun outil numérique disponible, première séance du semestre.'},
+  {l:'I',w:'Instructions',desc:"Spécifiez précisément le format et la structure du livrable. C'est la composante la plus déterminante. Plus vous êtes précis, moins l'IAG improvise.",eth:null,ex:'Génère une étude de cas incluant : <span class="hl">une situation narrative (250 mots)</span>, 3 questions analytiques progressives (Bloom 3, 4, 5), une grille d\'évaluation 5 critères avec indicateurs.'},
+  {l:'P',w:'Public',desc:"Décrivez précisément qui utilisera cette ressource : niveau, prérequis, rapport au sujet, difficultés connues. L'IAG calibre son registre sur cette information.",eth:"L'IAG ne connaît pas vos étudiants. Elle génère un contenu 'moyen' pour un public décrit. Vous seul savez ce qui correspond réellement à votre groupe.",ex:'<span class="hl">Étudiants de Master 1 en management</span>, 22-25 ans, sans expérience professionnelle, ayant suivi 6h d\'intro à la gestion de projet classique.'},
+  {l:'E',w:'Exemples',desc:"Fournissez un exemple du résultat attendu ou un contre-exemple à éviter. Composante optionnelle — mais celle qui produit le plus grand saut de qualité.",eth:null,ex:'Voici un exemple du niveau attendu : [extrait]. Évite ce type de formulation trop scolaire : <span class="hl">\'Listez les étapes\'</span> → préfère des mises en situation narratives.'}
+];
+
+const CE=[
+  {r:"Tu es un ingénieur pédagogique expert en enseignement supérieur, spécialisé dans la conception d'évaluations formatives.",e1:"L'objectif est que l'étudiant vérifie sa compréhension des concepts clés du chapitre avant l'évaluation sommative.",c:"Cours magistral de 2h en amphi, 80 étudiants de L2, le quiz sera sur smartphone pendant 10 minutes en fin de séance.",i:"Génère 8 questions QCM avec 4 options, une explication de correction pour chaque question, et le niveau Bloom ciblé (1 à 3 uniquement).",p:"Étudiants de L2 en sciences économiques, habitués aux QCM mais peu à l'auto-évaluation.",e2:"Évite les questions de mémorisation pure type 'Quelle est la définition de...' — préfère des questions de compréhension avec des exemples concrets."},
+  {r:"Tu es un concepteur pédagogique expert en scénarisation de situations authentiques.",e1:"L'objectif est que l'étudiant analyse une situation de management critique et propose une décision argumentée.",c:"Travail en groupe de 4, durée 1h30, support écrit de 2 pages max à remettre en fin de séance.",i:"Crée une étude de cas narrative (300 mots) présentant un conflit managérial réaliste, 3 questions analytiques progressives (Bloom 4, 5, 6) et une grille d'évaluation 4 critères.",p:"Master 1 Management RH, 22-24 ans, stage de 3 mois effectué, sensibles aux situations concrètes du monde professionnel.",e2:"La situation doit être ambiguë — l'objectif est de stimuler l'argumentation, pas la restitution d'une bonne réponse unique."},
+  {r:"Tu es un expert en évaluation pédagogique et en alignement constructif selon le modèle de Biggs.",e1:"L'objectif est de produire une grille d'évaluation cohérente avec les objectifs du cours et utilisable par plusieurs correcteurs.",c:"Devoir écrit individuel de 1500 mots, rendu hors présentiel, sur l'analyse d'une politique publique au choix.",i:"Génère une grille critériée avec 5 critères, 4 niveaux de maîtrise (insuffisant, en développement, satisfaisant, excellent), descripteurs comportementaux précis et pondération suggérée.",p:"Étudiants de L3 Sciences politiques, habitués à la dissertation mais peu à l'analyse de politiques publiques avec cadre méthodologique.",e2:""},
+  {r:"Tu es un formateur expert en dynamiques de groupe et en pédagogie active pour l'enseignement supérieur.",e1:"L'objectif est de créer une cohésion de groupe et d'activer les représentations initiales des étudiants sur le thème du cours.",c:"Activité d'ouverture de 20 minutes, groupe de 30 étudiants qui ne se connaissent pas, première séance, thème : l'intelligence artificielle en entreprise.",i:"Propose une activité brise-glace en 3 phases (individuel 5min, binôme 5min, mise en commun 10min) avec les consignes exactes, le matériel nécessaire et les questions de débriefing.",p:"Master 1 Management digital, 22-26 ans, profils variés (alternants et FI), rapport très hétérogène à l'IA selon les parcours.",e2:"L'activité ne doit pas être un simple tour de table — elle doit provoquer une légère surprise ou un débat pour engager dès le départ."}
+];
+
+let curCas=0;
+
+function showCard(i){
+  document.querySelectorAll('.recipe-card').forEach((c,j)=>c.classList.toggle('active',i===j));
+  const d=RD[i];
+  const det=document.getElementById('recipe-detail');
+  det.className='recipe-detail visible';
+  det.innerHTML=`<div class="detail-left"><div class="detail-word">${d.l} — ${d.w}</div><h3>${d.w}</h3><p>${d.desc}</p>${d.eth?`<div class="ethical-alert">${d.eth}</div>`:''}</div><div class="detail-right"><div class="detail-example-label">Exemple concret</div><div class="detail-example">${d.ex}</div></div>`;
+}
+showCard(0);
+
+function selectCas(i){curCas=i;document.querySelectorAll('.cas-card').forEach((c,j)=>c.classList.toggle('selected',i===j));doReset();}
+
+function updateOut(){
+  const r=v('fr'),e1=v('fe1'),c=v('fc'),i=v('fi'),p=v('fp'),e2=v('fe2');
+  const n=[r,e1,c,i,p,e2].filter(Boolean).length;
+  document.getElementById('bstatus').textContent=n+' / 6 composantes remplies';
+  const box=document.getElementById('obox');
+  const leg=document.getElementById('leg');
+  if(!n){box.innerHTML='<span class="output-placeholder">Remplissez les champs ci-dessus. Votre prompt s\'assemble en temps réel avec les couleurs RECIPE.</span>';leg.style.display='none';return;}
+  leg.style.display='flex';
+  const pts=[];
+  if(r) pts.push(`<span class="out-r">[R — Rôle] ${r}</span>`);
+  if(e1)pts.push(`<span class="out-e1">[E — Enjeu] ${e1}</span>`);
+  if(c) pts.push(`<span class="out-c">[C — Contexte] ${c}</span>`);
+  if(i) pts.push(`<span class="out-i">[I — Instructions] ${i}</span>`);
+  if(p) pts.push(`<span class="out-p">[P — Public] ${p}</span>`);
+  if(e2)pts.push(`<span class="out-e2">[E — Exemples] ${e2}</span>`);
+  box.innerHTML=pts.join('\n\n');
+}
+
+function v(id){return document.getElementById(id).value.trim();}
+
+function prefill(){
+  const ex=CE[curCas];
+  document.getElementById('fr').value=ex.r;
+  document.getElementById('fe1').value=ex.e1;
+  document.getElementById('fc').value=ex.c;
+  document.getElementById('fi').value=ex.i;
+  document.getElementById('fp').value=ex.p;
+  document.getElementById('fe2').value=ex.e2;
+  updateOut();
+}
+
+function doCopy(){
+  const pts=[];
+  const pairs=[['fr','Rôle'],['fe1','Enjeu'],['fc','Contexte'],['fi','Instructions'],['fp','Public'],['fe2','Exemples']];
+  pairs.forEach(([id,lbl])=>{const val=v(id);if(val)pts.push(`[${lbl}] ${val}`);});
+  if(!pts.length)return;
+  navigator.clipboard.writeText(pts.join('\n\n')).then(()=>{const t=document.getElementById('ctoa');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);});
+}
+
+function doReset(){
+  ['fr','fe1','fc','fi','fp','fe2'].forEach(id=>{document.getElementById(id).value='';});
+  updateOut();
+}
+
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
